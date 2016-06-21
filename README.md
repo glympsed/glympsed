@@ -1,72 +1,83 @@
-<strong>MDI Biological Labs. Barnraising workshop - (Maine) May 2016</strong>
+# Gylmpsed: Genetic Structure and Pathway Discovery
 
-This project is a collaborative effort between Lisa (Titus group - UC Davis), Harriet (Titus group - UC Davis), Dave Harris (U. Florida), Yuan (Princeton), and Oliver Muellerklein (me - Wayne Getz's group at UC Berkeley). We are working on a way to model structure in pathway emergence from a dataset of
+## 1 Running software
 
-# Structure / Pathway Discovery
+This project uses a combination of pure Python scripts (<i>file.py</i>) as well as <strong>iPython Notebook</strong> (<i>file.ipynb</i>).
 
-Have a set of organisms. Have rows of genes. Columns of conditions / specifications / etc per gene. Background: perhaps there are pathways of gene expression we could discover that relate to a species / organism liking burgers and another pathway of genes that relate to liking mushrooms. There can be overlap in genes in pathways for liking burgers and liking mushrooms. So each set of genes / pathway can exist independently.
+#### 1.1 Script Overview
 
-## 1. Summary / Overview
+* Scripts for visualizing the clustering of the nodes (hidden layers) that the Autoencoder method found can be found in the **run_unsupervised.py** script that is within the *sample-models/* directory and can be called from main.
 
-### 1.1 Group To Do
+* The file **calc-gene-pathway-counts.R** - R script that can be used to calculate the number of genes that are within each pathway and the number of pathways that each gene appears in - output as CSV for each.
 
-- [X] Create Github repo and Slack channel
-- [X] Simulate organism properties = create simulated data (1000 rows x 500k cols)
-- [X] Create f(...) map projection of properties to expression levels
-- [X] Apply f() to properties for each species (i.e. each row in the simulated data)
-- [ ] Finalize simulated data w.r.t. biological expectations 
-- [ ] Run models: PCA, kernel-PCA / Spectral Clustering, multi-class clustering boosted + bagged, Autoencoder through AWC
-- [ ] Test models w/ Pseudomonas data from Greene Lab 
-- [ ] Add denoisey to Autoencorder
-- [ ] Tune kernel PCA
-- [ ] Try clustering (e.g. Spectral)
-- [ ] Run t-SNE for data viz and comparison
-- [ ] Model validity, feature importance
-- [ ] Test model(s) on real data = does it work?
-- [ ] Use of ensemble (this means averaging a set of models - may not make sense / be necessary)?
+* **Autoencoder weights** - visualizing 50 nodes (rows) x 5549 genes (columns) to explore the clustering of nodes within a subspace of the gene space.
 
-<hr>
+* **Autoencoder codings** - visualize 50 nodes (rows) x 950 samples (columns) to explore the clustering of nodes within a subspace of the sample space.
 
-We will create a set of response classes in simulated to train on:
+#### 1.2 Calling from the Command Line
 
-**Note: there are no classes in the test (real) data** - but creating the model will involve us training and testing validity on only simulated data. I.e. can we recover the simulated response classes from the simulated data?
+Calling the <i>main.py</i> script from the command line:
 
-These response classes;
-E.g. *"likes burgers", "likes mushrooms"*
+```
+    $ python __main__.py
+```
 
-## 2. Data
-
-We are going to use simulated data that represents rows of genes with columns of condition expression. Simulated data comes from a number of parameters of gene-properties-transcript relationships / complex.
-
-Setting 10 target labels (~10 multi-class predictor probabilities).
+The <i>main.py</i> script calls the executer function to run the project.
 
 <hr>
 
-Steps for creating simulation data:
+## 2 Data
+
+This project contains three sets of data - open-access Pseudomonas, simulated, and <strong>MMETSP</strong>.
+
+#### 2.1 Pseudomonas
+
+Reproduce previous study.
+
+#### 2.2 Simulated
+
+Steps for creating simulated data:
 
 * create 2 _Beta_ probability distributions
 * multiplication of the 2 _Betas_
 * take *Binomial* distribution (*Bernoulli*) of point above
 
-## 3. Model Approaches
+#### 2.3 MMETSP
 
-Want to examine dimensional reduction methods. Want to examine the use of PCA, clustering or other dimensional reduction methods (e.g. kernel-PCA, spectral clustering), autoencoding, multi-class classification wiwth soft predictions (i.e. get probabilities per class instead of discrete predictions), auto-encoder.
-
-<hr>
-
-# Background
-
-## Titus - structure gene discovery pitch
-
-#### Overview
-
-- matrix with rows of genes and cols of some conditions
-- there may exist some hidden layer of interactions of these conditions
-- these hidden layers would correspond to some pathways of conditional relationships (relationships of the features)
+Explain here...
 
 <hr>
 
-<strong>Goals:</strong>
+## 3 Analysis  
 
-- find deep / hidden layer with either deep-NN and / or XGBoost
-- visualize clustering of features via [t-SNE](https://lvdmaaten.github.io/tsne/)
+#### 3.1 Overview
+
+This project makes use of a variety of dimensional reduction, clustering, and unsupervised and semi-supervised machine-learning techniques. These include <strong>PCA, ICA, and Autoencoders</strong>. In addition, <strong>t-SNE</strong> was used for dimensional reduction, clustering, and visualization.  
+
+#### 3.2 PCA and ICA
+
+Did not perform well.
+
+#### 3.3 Autoencoder
+
+#### 3.4 t-SNE
+
+[t-SNE](https://lvdmaaten.github.io/tsne/) can be used as an independent method for dimensional reduction and visualization or in combination with a dimensional reduction technique - e.g. PCA.
+
+Some examples of t-SNE usage:
+
+* <strong>PCA into 50 dimensions and then scatter plot of all genes in 2-dimensions with t-SNE</strong> to try to visualize the clustering of those 50 PCs as matching the 50 hidden nodes from Autoencoding (bad results as expected since PCA does not do well on this data)
+
+* <strong>t-SNE directly on raw data to try to find clustering - scatter plot of all genes in 2-dimensions</strong> - this is also not good as expected (since PCA did not work well)
+
+* <strong>2-dimensional plot of all nodes from hidden layer (Autoencoder) clustered with t-SNE</strong> - this is actually two plots: one for the Autoencoder weights and another for the Autoencoder codings. In these plots you can start to see some nodes (some hidden layers) that really stand out from the rest - **such as node 18** - which probably has a major influence on genetic expression
+
+#### 3.5 Extra
+
+In addition to the methods mentioned above - we have visualizations of the following *post-structure-discovery* methods:
+
+* <strong>Feature importance of nodes (from hidden layers of Autoencoder) as predictors</strong> for classifying genes to their respective nodes of highest weight - through random forest multi-classification - this means I assigned each gene a label that corresponded to the node that had the highest weight value for it
+
+* <strong>Feature importance of samples (from original dataset of 950 samples / predictors)</strong> for classifying genes to their respective nodes of highest weight - through random forest multi-classification and then boosted classification methods (*GBM*)
+
+<strong>NOTE:</strong> feature importance is measured as the gain in reducing misclassifications per feature / predictor / column. So this means feature importance is a measure of (generally) how much better any specific feature is at making the entire model predict the nodes / classes of the genes.  

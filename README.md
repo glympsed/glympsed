@@ -1,8 +1,10 @@
-# Gylmpsed: Genetic Structure and Pathway Discovery
+# glympsed: Gene Pathway and Structure Discovery
+
+`glympsed` is a pipeline for querying large RNAseq gene expression data sets with more than 100 samples and 30,000 genes each for patterns of common expression using the unsupervised machine-learning library, [Keras](http://keras.io/). This tool can be used to enable discovery of common patterns of expression where there is are unknown relationships between samples. The results can then be used to provide evidence to generate hypotheses for further investigation.
 
 ## 1 Running software
 
-This project uses a combination of pure Python scripts (<i>file.py</i>) as well as <strong>iPython Notebook</strong> (<i>file.ipynb</i>).
+The pipeline uses a combination of Python scripts (<i>file.py</i>) as well as <strong>iPython Notebook</strong> (<i>file.ipynb</i>). The user is expected to provide a matrix of counts for each sample x gene ID.
 
 #### 1.1 Script Overview
 
@@ -32,7 +34,7 @@ This project contains three sets of data - open-access Pseudomonas, simulated, a
 
 #### 2.1 Pseudomonas
 
-Reproduce previous study.
+Reproduces a previous study with data from Pseudomonas aeruginosa ([Tan et al 2015](http://msystems.asm.org/content/1/1/e00025-15)). 
 
 #### 2.2 Simulated
 
@@ -44,7 +46,7 @@ Steps for creating simulated data:
 
 #### 2.3 MMETSP
 
-Explain here...
+The Marine Microbial Eukaryotic Transcriptome Sequencing Project (MMETSP), which contains RNAseq data from 678 divergent samples representing more than 40 phyla ([Keeling et al. 2014](http://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1001889). Many of the species in this data set do not have a reference genomes. Following transcriptome assembly, the procedure for annotation is not straightforward.
 
 <hr>
 
@@ -81,3 +83,7 @@ In addition to the methods mentioned above - we have visualizations of the follo
 * <strong>Feature importance of samples (from original dataset of 950 samples / predictors)</strong> for classifying genes to their respective nodes of highest weight - through random forest multi-classification and then boosted classification methods (*GBM*)
 
 <strong>NOTE:</strong> feature importance is measured as the gain in reducing misclassifications per feature / predictor / column. So this means feature importance is a measure of (generally) how much better any specific feature is at making the entire model predict the nodes / classes of the genes.  
+
+## Collaboration
+
+This is a collaboration between Lisa Cohen (Titus Brown lab, UC Davis), Harriet Alexander (Titus Brown lab, UC Davis), Dave Harris (Ethan White lab, University of Florida), Yuan Liu (Princeton University), and Oliver Muellerklein (Wayne Getz lab, UC Berkeley). We started as team "burgers and mushrooms" at the Moore Foundation's Data Driven Discovery Barn-Raising event held at the Mount Desert Island Biological Laboratory in Bar Harbor, Maine from May 1-6, 2016 coordinated by Dr. Casey Greene and Dr. Blaire Sullivan.
